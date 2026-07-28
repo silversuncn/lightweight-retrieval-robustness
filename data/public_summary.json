@@ -1,0 +1,44 @@
+{
+  "title": "Lightweight Retrieval Robustness under Domain Shift",
+  "author": "Yaowen Sun",
+  "year": 2026,
+  "datasets": [
+    "arguana",
+    "fiqa",
+    "nfcorpus",
+    "scifact"
+  ],
+  "methods": [
+    "all_minilm_l6",
+    "bm25"
+  ],
+  "seeds": [
+    23,
+    41,
+    67,
+    83,
+    127
+  ],
+  "query_cap": 50,
+  "retrieval_depth": 100,
+  "row_counts": {
+    "query_level_rows": 2000,
+    "aggregate_rows": 40,
+    "method_quality_rows": 8,
+    "bootstrap_ci_rows": 12,
+    "regret_rank_rows": 8,
+    "latency_context_rows": 8
+  },
+  "headline_values": {
+    "arguana_all_minilm_l6_ndcg10": 0.3635,
+    "arguana_bm25_ndcg10": 0.3318,
+    "fiqa_all_minilm_l6_ndcg10": 0.3808,
+    "fiqa_bm25_ndcg10": 0.2444,
+    "nfcorpus_all_minilm_l6_ndcg10": 0.2603,
+    "nfcorpus_bm25_ndcg10": 0.2599,
+    "scifact_all_minilm_l6_ndcg10": 0.6504,
+    "scifact_bm25_ndcg10": 0.6814,
+    "maximum_regret_range": 0.1363
+  },
+  "claim_boundary": "Empirical measurement over the tested public datasets and methods only; no new retrieval model and no state-of-the-art claim."
+}

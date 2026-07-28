@@ -1,0 +1,1 @@
+# No third-party Python package is required for the public verification script.

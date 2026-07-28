@@ -1,0 +1,5 @@
+dataset,corpus_docs,queries,qrel_queries,qrel_pairs,qrels_split,source
+scifact,5183,1109,300,339,test,BEIR public dataset
+nfcorpus,3633,3237,323,12334,test,BEIR public dataset
+arguana,8674,1406,1406,1406,test,BEIR public dataset
+fiqa,57638,6648,648,1706,test,BEIR public dataset
