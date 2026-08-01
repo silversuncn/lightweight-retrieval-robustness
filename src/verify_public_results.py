@@ -14,16 +14,20 @@ DATA = ROOT / "data"
 
 
 EXPECTED_DATASETS = {"arguana", "fiqa", "nfcorpus", "scifact"}
-EXPECTED_METHODS = {"all_minilm_l6", "bm25"}
+EXPECTED_METHODS = {"all_minilm_l6", "bge_small_en_v15", "bm25"}
 EXPECTED_SEEDS = {23, 41, 67, 83, 127}
 EXPECTED_HEADLINES = {
     ("arguana", "all_minilm_l6"): 0.3635,
+    ("arguana", "bge_small_en_v15"): 0.4240,
     ("arguana", "bm25"): 0.3318,
     ("fiqa", "all_minilm_l6"): 0.3808,
+    ("fiqa", "bge_small_en_v15"): 0.3626,
     ("fiqa", "bm25"): 0.2444,
     ("nfcorpus", "all_minilm_l6"): 0.2603,
+    ("nfcorpus", "bge_small_en_v15"): 0.2876,
     ("nfcorpus", "bm25"): 0.2599,
     ("scifact", "all_minilm_l6"): 0.6504,
+    ("scifact", "bge_small_en_v15"): 0.7099,
     ("scifact", "bm25"): 0.6814,
 }
 
@@ -52,20 +56,20 @@ def build_report() -> dict[str, object]:
     regret_rows = read_csv("regret_rank_stability.csv")
     latency_rows = read_csv("latency_cost_context.csv")
 
-    if len(query_rows) != 2000:
-        raise AssertionError(f"query rows: observed {len(query_rows)}, expected 2000")
-    if len(aggregate_rows) != 40:
-        raise AssertionError(f"aggregate rows: observed {len(aggregate_rows)}, expected 40")
+    if len(query_rows) != 3000:
+        raise AssertionError(f"query rows: observed {len(query_rows)}, expected 3000")
+    if len(aggregate_rows) != 60:
+        raise AssertionError(f"aggregate rows: observed {len(aggregate_rows)}, expected 60")
     if len(dataset_rows) != 4:
         raise AssertionError(f"dataset rows: observed {len(dataset_rows)}, expected 4")
-    if len(quality_rows) != 8:
-        raise AssertionError(f"quality rows: observed {len(quality_rows)}, expected 8")
-    if len(bootstrap_rows) != 12:
-        raise AssertionError(f"bootstrap rows: observed {len(bootstrap_rows)}, expected 12")
-    if len(regret_rows) != 8:
-        raise AssertionError(f"regret rows: observed {len(regret_rows)}, expected 8")
-    if len(latency_rows) != 8:
-        raise AssertionError(f"latency rows: observed {len(latency_rows)}, expected 8")
+    if len(quality_rows) != 12:
+        raise AssertionError(f"quality rows: observed {len(quality_rows)}, expected 12")
+    if len(bootstrap_rows) != 24:
+        raise AssertionError(f"bootstrap rows: observed {len(bootstrap_rows)}, expected 24")
+    if len(regret_rows) != 12:
+        raise AssertionError(f"regret rows: observed {len(regret_rows)}, expected 12")
+    if len(latency_rows) != 12:
+        raise AssertionError(f"latency rows: observed {len(latency_rows)}, expected 12")
 
     datasets = {row["dataset"] for row in aggregate_rows}
     methods = {row["method"] for row in aggregate_rows}
@@ -90,14 +94,14 @@ def build_report() -> dict[str, object]:
     for row in regret_rows:
         regret_by_method.setdefault(row["method"], []).append(float(row["regret_ndcg@10"]))
     max_regret_range = max(max(values) - min(values) for values in regret_by_method.values())
-    assert_close("maximum regret range", round(max_regret_range, 4), 0.1363)
+    assert_close("maximum regret range", round(max_regret_range, 4), 0.1086)
 
     if {int(row["n_pairs"]) for row in bootstrap_rows} != {250}:
         raise AssertionError("all bootstrap rows must have 250 query-seed pairs")
 
     return {
         "status": "PASS",
-        "title": summary["title"],
+        "title": summary.get("title", summary.get("topic")),
         "row_counts": {
             "query_level_rows": len(query_rows),
             "aggregate_rows": len(aggregate_rows),

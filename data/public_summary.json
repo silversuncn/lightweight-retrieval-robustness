@@ -10,6 +10,7 @@
   ],
   "methods": [
     "all_minilm_l6",
+    "bge_small_en_v15",
     "bm25"
   ],
   "seeds": [
@@ -22,23 +23,28 @@
   "query_cap": 50,
   "retrieval_depth": 100,
   "row_counts": {
-    "query_level_rows": 2000,
-    "aggregate_rows": 40,
-    "method_quality_rows": 8,
-    "bootstrap_ci_rows": 12,
-    "regret_rank_rows": 8,
-    "latency_context_rows": 8
+    "query_level_rows": 3000,
+    "aggregate_rows": 60,
+    "method_quality_rows": 12,
+    "bootstrap_ci_rows": 24,
+    "regret_rank_rows": 12,
+    "latency_context_rows": 12
   },
   "headline_values": {
     "arguana_all_minilm_l6_ndcg10": 0.3635,
+    "arguana_bge_small_en_v15_ndcg10": 0.4240,
     "arguana_bm25_ndcg10": 0.3318,
     "fiqa_all_minilm_l6_ndcg10": 0.3808,
+    "fiqa_bge_small_en_v15_ndcg10": 0.3626,
     "fiqa_bm25_ndcg10": 0.2444,
     "nfcorpus_all_minilm_l6_ndcg10": 0.2603,
+    "nfcorpus_bge_small_en_v15_ndcg10": 0.2876,
     "nfcorpus_bm25_ndcg10": 0.2599,
     "scifact_all_minilm_l6_ndcg10": 0.6504,
+    "scifact_bge_small_en_v15_ndcg10": 0.7099,
     "scifact_bm25_ndcg10": 0.6814,
-    "maximum_regret_range": 0.1363
+    "largest_single_regret": 0.1363,
+    "maximum_method_level_regret_range": 0.1086
   },
   "claim_boundary": "Empirical measurement over the tested public datasets and methods only; no new retrieval model and no state-of-the-art claim."
 }

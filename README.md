@@ -13,9 +13,10 @@ tests for checking the reported row counts and headline values.
 
 Repository URL: https://github.com/silversuncn/lightweight-retrieval-robustness
 
-The formal matrix contains 2,000 query-level rows and 40 aggregate cells across
-four datasets, two retrieval methods, and five query-bootstrap seeds. The tested
-methods are BM25 lexical retrieval and an all-MiniLM-L6 dense bi-encoder. The
+The formal matrix contains 3,000 query-level rows and 60 aggregate cells across
+four datasets, three retrieval methods, and five query-bootstrap seeds. The tested
+methods are BM25 lexical retrieval, an all-MiniLM-L6 dense bi-encoder, and a
+BGE-small dense bi-encoder. The
 primary reported metrics are nDCG@10, MRR@10, Recall@100, method-rank stability,
 cross-domain regret, and cached latency/build-time context.
 
@@ -53,7 +54,7 @@ cross-domain regret, and cached latency/build-time context.
 | Dimension | Values | Count |
 | --- | --- | ---: |
 | Datasets | `arguana`, `fiqa`, `nfcorpus`, `scifact` | 4 |
-| Methods | `bm25`, `all_minilm_l6` | 2 |
+| Methods | `bm25`, `all_minilm_l6`, `bge_small_en_v15` | 3 |
 | Query-bootstrap seeds | 23, 41, 67, 83, 127 | 5 |
 | Query cap | 50 judged queries per dataset and seed | 1 |
 | Retrieval depth | Top 100 | 1 |
@@ -61,21 +62,23 @@ cross-domain regret, and cached latency/build-time context.
 Row-count check:
 
 ```text
-4 datasets x 2 methods x 5 seeds x 50 queries = 2,000 query-level rows
-4 datasets x 2 methods x 5 seeds = 40 aggregate cells
+4 datasets x 3 methods x 5 seeds x 50 queries = 3,000 query-level rows
+4 datasets x 3 methods x 5 seeds = 60 aggregate cells
 ```
 
 ## Hardware & Environment
 
-The reported matrix was produced on CPU with Python 3.11. Dense retrieval uses
-MiniLM transformer inference, and timing columns are cached-ranking context
-rather than end-to-end deployment benchmarks.
+The reported matrix was produced with Python 3.11 and GPU dense-embedding
+inference on CUDA. Dense retrieval uses transformer mean pooling for MiniLM and
+BGE-small; timing columns are cached-ranking context rather than end-to-end
+deployment benchmarks.
 
 ## Key Results
 
-- MiniLM has higher mean nDCG@10 than BM25 on ArguAna, FiQA, and NFCorpus.
-- BM25 has higher mean nDCG@10 than MiniLM on SciFact.
-- The maximum regret range is 0.1363 under the tested protocol.
+- BGE-small has the highest mean nDCG@10 on ArguAna, NFCorpus, and SciFact.
+- MiniLM has the highest mean nDCG@10 on FiQA.
+- The largest single observed nDCG regret is 0.1363 for BM25 on FiQA, and the
+  maximum method-level regret range is 0.1086 under the tested protocol.
 - The results support a bounded empirical conclusion about dataset-dependent
   retrieval robustness; they are not a state-of-the-art claim and do not propose
   a new retrieval model.
