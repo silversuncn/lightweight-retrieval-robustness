@@ -1,7 +1,0 @@
-cff-version: 1.2.0
-message: "If you use this artifact, please cite the accompanying manuscript."
-title: "Lightweight Retrieval Robustness under Domain Shift"
-authors:
-  - family-names: "Sun"
-    given-names: "Yaowen"
-year: 2026

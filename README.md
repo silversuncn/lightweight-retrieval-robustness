@@ -1,48 +1,37 @@
-# Lightweight Retrieval Robustness under Domain Shift
+# Lightweight Retrieval Robustness across Heterogeneous Tasks
 
-> **Lightweight Retrieval Robustness under Domain Shift**  
-> Yaowen Sun
+> **Lightweight Retrieval Robustness across Heterogeneous Tasks**  
+> Yaowen Sun; Hai Du; Qian Zhang
 
 ## Overview
 
-This repository contains a sanitized reproduction bundle for an empirical
-retrieval study on how lightweight retrieval methods behave across public
-BEIR-style datasets under a fixed evaluation protocol. The bundle includes
-processed result tables, paper figures, a lightweight verification script, and
-tests for checking the reported row counts and headline values.
+This repository contains a public artifact bundle for an empirical retrieval
+evaluation across heterogeneous BEIR-style tasks. It includes sanitized result
+tables, paper-referenced figures, and lightweight verification scripts.
 
-Repository URL: https://github.com/silversuncn/lightweight-retrieval-robustness
-
-The formal matrix contains 3,000 query-level rows and 60 aggregate cells across
-four datasets, three retrieval methods, and five query-bootstrap seeds. The tested
-methods are BM25 lexical retrieval, an all-MiniLM-L6 dense bi-encoder, and a
-BGE-small dense bi-encoder. The
-primary reported metrics are nDCG@10, MRR@10, Recall@100, method-rank stability,
-cross-domain regret, and cached latency/build-time context.
+The evaluation contains 8,031 query-level rows from four datasets and three
+retrieval methods, forming 12 model-dataset combinations. Runtime measurements are not part of the contribution or the public result tables.
 
 ## Repository Structure
 
 ```text
 .
 ├── README.md
-├── CITATION.cff
 ├── LICENSE
 ├── requirements.txt
+├── checksums_sha256.txt
 ├── data/
 │   ├── README.md
 │   ├── public_summary.json
 │   ├── results.csv
 │   ├── results_aggregated.csv
 │   ├── dataset_summary.csv
-│   ├── method_quality_table.csv
 │   ├── regret_rank_stability.csv
-│   ├── bootstrap_ci.csv
-│   └── latency_cost_context.csv
+│   └── pairwise_statistics.csv
 ├── figures/
-│   ├── figure_quality_breakdown.png
-│   ├── figure_regret_heatmap.png
-│   ├── figure_bootstrap_distribution.png
-│   └── figure_quality_cost_pareto.png
+│   ├── fig1_quality_bars_v2.png
+│   ├── fig2_regret_heatmap_v2.png
+│   └── fig3_bootstrap_distributions_v2.png
 ├── src/
 │   └── verify_public_results.py
 └── tests/
@@ -51,62 +40,86 @@ cross-domain regret, and cached latency/build-time context.
 
 ## Experimental Setup
 
+The public tables are derived from the complete eligible query set for each
+dataset. The query-level table has one row per dataset, method, and eligible
+query, with columns for nDCG@10, MRR@10, and Recall@100. The aggregate table has
+12 rows, one for each model-dataset combination.
+
+| Dataset | Eligible queries |
+| --- | ---: |
+| ArguAna | 1,406 |
+| FiQA | 648 |
+| NFCorpus | 323 |
+| SciFact | 300 |
+
 | Dimension | Values | Count |
 | --- | --- | ---: |
-| Datasets | `arguana`, `fiqa`, `nfcorpus`, `scifact` | 4 |
-| Methods | `bm25`, `all_minilm_l6`, `bge_small_en_v15` | 3 |
-| Query-bootstrap seeds | 23, 41, 67, 83, 127 | 5 |
-| Query cap | 50 judged queries per dataset and seed | 1 |
-| Retrieval depth | Top 100 | 1 |
+| Datasets | ArguAna, FiQA, NFCorpus, SciFact | 4 |
+| Retrieval methods | BM25, all-MiniLM-L6, BGE-small | 3 |
+| Evaluation unit | Eligible judged query | 8,031 rows |
+| Aggregate cells | Dataset x method | 12 |
 
-Row-count check:
+## Figures
 
-```text
-4 datasets x 3 methods x 5 seeds x 50 queries = 3,000 query-level rows
-4 datasets x 3 methods x 5 seeds = 60 aggregate cells
-```
+The bundle includes only the three figures referenced by the current paper:
 
-## Hardware & Environment
+| File | Content |
+| --- | --- |
+| `figures/fig1_quality_bars_v2.png` | Mean retrieval quality by dataset and method. |
+| `figures/fig2_regret_heatmap_v2.png` | Dataset-wise nDCG regret relative to the best method. |
+| `figures/fig3_bootstrap_distributions_v2.png` | Query-level paired uncertainty distributions. |
 
-The reported matrix was produced with Python 3.11 and GPU dense-embedding
-inference on CUDA. Dense retrieval uses transformer mean pooling for MiniLM and
-BGE-small; timing columns are cached-ranking context rather than end-to-end
-deployment benchmarks.
+## Verification
 
-## Key Results
-
-- BGE-small has the highest mean nDCG@10 on ArguAna, NFCorpus, and SciFact.
-- MiniLM has the highest mean nDCG@10 on FiQA.
-- The largest single observed nDCG regret is 0.1363 for BM25 on FiQA, and the
-  maximum method-level regret range is 0.1086 under the tested protocol.
-- The results support a bounded empirical conclusion about dataset-dependent
-  retrieval robustness; they are not a state-of-the-art claim and do not propose
-  a new retrieval model.
-
-## Requirements
-
-The included verification script uses only the Python standard library. The
-`requirements.txt` file records the main packages used by the experiment
-environment.
-
-Verify the public tables:
+The verification script uses only the Python standard library:
 
 ```bash
 python src/verify_public_results.py
 ```
 
-Run the tests:
+The test suite checks the same public counts and headline ordering:
 
 ```bash
 python -m unittest discover -s tests -q
 ```
 
+## Hardware & Environment
+
+The recorded v2 environment used Linux under WSL2 with Python `3.11.15`.
+The package snapshot records PyTorch `2.11.0+cu128`, Transformers `5.4.0`,
+NumPy `2.4.4`, SciPy `1.17.1`, Matplotlib `3.10.8`, Pandas `3.0.1`, and
+Requests `2.33.1`. The public verification script is CPU-only and reads the
+bundled CSV/JSON files.
+
+## Key Results
+
+BGE-small has the highest mean nDCG@10 on all four datasets.
+
+| Dataset | BM25 | all-MiniLM-L6 | BGE-small | Best |
+| --- | ---: | ---: | ---: | --- |
+| ArguAna | 0.3408 | 0.3698 | 0.4333 | BGE-small |
+| FiQA | 0.2372 | 0.3687 | 0.3913 | BGE-small |
+| NFCorpus | 0.3073 | 0.3167 | 0.3454 | BGE-small |
+| SciFact | 0.6622 | 0.6451 | 0.7005 | BGE-small |
+
+These results support a bounded empirical conclusion about the tested public
+datasets and methods only. The artifact does not introduce a new retrieval
+model and does not make a state-of-the-art claim.
+
+## Requirements
+
+The bundled verifier uses the Python standard library. Re-running the analysis
+tables requires the packages listed in `requirements.txt`.
+
+## License
+
+The code and derived public tables in this bundle are provided under the MIT
+License in `LICENSE`.
+
 ## Citation
 
-```bibtex
-@article{sun2026lightweightretrievalrobustness,
-  title = {Lightweight Retrieval Robustness under Domain Shift},
-  author = {Sun, Yaowen},
-  year = {2026}
-}
-```
+Title: Lightweight Retrieval Robustness across Heterogeneous Tasks
+
+Authors: Yaowen Sun; Hai Du; Qian Zhang
+
+Year: 2026

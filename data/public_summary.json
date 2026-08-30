@@ -1,6 +1,10 @@
 {
-  "title": "Lightweight Retrieval Robustness under Domain Shift",
-  "author": "Yaowen Sun",
+  "title": "Lightweight Retrieval Robustness across Heterogeneous Tasks",
+  "authors": [
+    "Yaowen Sun",
+    "Hai Du",
+    "Qian Zhang"
+  ],
   "year": 2026,
   "datasets": [
     "arguana",
@@ -9,42 +13,72 @@
     "scifact"
   ],
   "methods": [
+    "bm25",
     "all_minilm_l6",
-    "bge_small_en_v15",
-    "bm25"
+    "bge_small_en_v15"
   ],
-  "seeds": [
-    23,
-    41,
-    67,
-    83,
-    127
+  "metrics": [
+    "ndcg@10",
+    "mrr@10",
+    "recall@100"
   ],
-  "query_cap": 50,
-  "retrieval_depth": 100,
   "row_counts": {
-    "query_level_rows": 3000,
-    "aggregate_rows": 60,
-    "method_quality_rows": 12,
-    "bootstrap_ci_rows": 24,
-    "regret_rank_rows": 12,
-    "latency_context_rows": 12
+    "query_level_rows": 8031,
+    "model_dataset_combinations": 12,
+    "datasets": 4,
+    "methods": 3
   },
-  "headline_values": {
-    "arguana_all_minilm_l6_ndcg10": 0.3635,
-    "arguana_bge_small_en_v15_ndcg10": 0.4240,
-    "arguana_bm25_ndcg10": 0.3318,
-    "fiqa_all_minilm_l6_ndcg10": 0.3808,
-    "fiqa_bge_small_en_v15_ndcg10": 0.3626,
-    "fiqa_bm25_ndcg10": 0.2444,
-    "nfcorpus_all_minilm_l6_ndcg10": 0.2603,
-    "nfcorpus_bge_small_en_v15_ndcg10": 0.2876,
-    "nfcorpus_bm25_ndcg10": 0.2599,
-    "scifact_all_minilm_l6_ndcg10": 0.6504,
-    "scifact_bge_small_en_v15_ndcg10": 0.7099,
-    "scifact_bm25_ndcg10": 0.6814,
-    "largest_single_regret": 0.1363,
-    "maximum_method_level_regret_range": 0.1086
+  "query_counts_by_dataset": {
+    "arguana": 1406,
+    "fiqa": 648,
+    "nfcorpus": 323,
+    "scifact": 300
   },
+  "mean_ndcg_at_10": {
+    "arguana": {
+      "all_minilm_l6": 0.36983417349799114,
+      "bge_small_en_v15": 0.4332670933862082,
+      "bm25": 0.34078699269741264
+    },
+    "fiqa": {
+      "all_minilm_l6": 0.36867136984071597,
+      "bge_small_en_v15": 0.39126178824863234,
+      "bm25": 0.23719561294834587
+    },
+    "nfcorpus": {
+      "all_minilm_l6": 0.31672230320930983,
+      "bge_small_en_v15": 0.3454137274739744,
+      "bm25": 0.3073218775425817
+    },
+    "scifact": {
+      "all_minilm_l6": 0.6450816521455774,
+      "bge_small_en_v15": 0.7005040179184695,
+      "bm25": 0.662213025368359
+    }
+  },
+  "method_orders_by_dataset": {
+    "arguana": [
+      "bge_small_en_v15",
+      "all_minilm_l6",
+      "bm25"
+    ],
+    "fiqa": [
+      "bge_small_en_v15",
+      "all_minilm_l6",
+      "bm25"
+    ],
+    "nfcorpus": [
+      "bge_small_en_v15",
+      "all_minilm_l6",
+      "bm25"
+    ],
+    "scifact": [
+      "bge_small_en_v15",
+      "bm25",
+      "all_minilm_l6"
+    ]
+  },
+  "bge_small_leads_all_datasets": true,
+  "runtime_measurements_in_public_tables": false,
   "claim_boundary": "Empirical measurement over the tested public datasets and methods only; no new retrieval model and no state-of-the-art claim."
 }

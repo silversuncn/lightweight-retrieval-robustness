@@ -1,1 +1,1 @@
-# No third-party Python package is required for the public verification script.
+# The public verification script and tests use only the Python standard library.
