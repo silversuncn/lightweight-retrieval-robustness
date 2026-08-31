@@ -5,9 +5,17 @@
 
 ## Overview
 
-This repository contains a public artifact bundle for an empirical retrieval
-evaluation across heterogeneous BEIR-style tasks. It includes sanitized result
-tables, paper-referenced figures, and lightweight verification scripts.
+This repository contains a public derived-result verification bundle for an
+empirical retrieval evaluation across heterogeneous BEIR-style tasks. It
+includes processed aggregate tables, paper-referenced figures, and lightweight
+verification scripts, matching the paper's Data and Code Availability
+statement.
+
+This bundle verifies derived metrics and identifiers. It is not an end-to-end
+retrieval reproduction pipeline: it does not redistribute raw dataset text and
+does not include scripts for data acquisition, model inference, training,
+retrieval reruns, or regeneration of the paper's tables and figures from raw
+corpora.
 
 The evaluation contains 8,031 query-level rows from four datasets and three
 retrieval methods, forming 12 model-dataset combinations. Runtime measurements are not part of the contribution or the public result tables.
@@ -108,8 +116,8 @@ model and does not make a state-of-the-art claim.
 
 ## Requirements
 
-The bundled verifier uses the Python standard library. Re-running the analysis
-tables requires the packages listed in `requirements.txt`.
+The bundled verifier and tests use only the Python standard library. No
+third-party package is required for the included public verification checks.
 
 ## License
 
